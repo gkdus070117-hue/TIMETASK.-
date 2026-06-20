@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeTask - 스마트 일정 관리</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">⏳</span> TimeTask
+            </div>
+            <div class="date-display" id="currentDateDisplay">오늘의 날짜</div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="dashboard-header">
+            <h1 class="gradient-text">당신의 완벽한 하루</h1>
+            <p class="subtitle">할 일과 고정 일정을 입력하면, AI 기반 알고리즘이 최적의 일과를 추천합니다.</p>
+        </div>
+
+        <div class="grid-layout">
+            <!-- Left Column: Input Forms -->
+            <div class="left-panel">
+                <!-- Task Form -->
+                <section class="glass-card form-section">
+                    <h2>📝 할 일 (Task) 추가</h2>
+                    <form id="taskForm">
+                        <div class="form-group">
+                            <label for="taskName">할 일 이름</label>
+                            <input type="text" id="taskName" class="form-control input-animate" required placeholder="예: 웹사이트 만들기">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="taskDuration">소요 시간 (분)</label>
+                                <input type="number" id="taskDuration" class="form-control input-animate" required min="1" placeholder="60">
+                            </div>
+                            <div class="form-group half">
+                                <label for="taskPriority">우선순위</label>
+                                <select id="taskPriority" class="form-control input-animate" required>
+                                    <option value="3">🔥 높음</option>
+                                    <option value="2">⚡ 중간</option>
+                                    <option value="1">🌱 낮음</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>마감 기한</label>
+                            <div style="display:flex; gap:0.5rem;">
+                                <input type="date" id="taskDeadlineDate" class="form-control input-animate" required style="flex:2;">
+                                <select id="taskDeadlineAmpm" class="form-control input-animate" style="flex:1; padding:0.8rem 0.5rem;"><option value="AM">오전</option><option value="PM">오후</option></select>
+                                <select id="taskDeadlineHour" class="form-control input-animate" style="flex:1; padding:0.8rem 0.5rem;"></select>
+                                <select id="taskDeadlineMinute" class="form-control input-animate" style="flex:1; padding:0.8rem 0.5rem;"></select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block glow-effect">할 일 추가하기</button>
+                    </form>
+                </section>
+
+                <!-- Routine Form -->
+                <section class="glass-card form-section mt-4">
+                    <h2>⏰ 고정 일정 (Routine) 추가</h2>
+                    <form id="routineForm">
+                        <div class="form-group">
+                            <label for="routineName">일정 이름</label>
+                            <input type="text" id="routineName" class="form-control input-animate" required placeholder="예: 대학교 전공수업">
+                        </div>
+                        <div class="form-group">
+                            <label>반복 요일</label>
+                            <div class="day-checkboxes" style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--text-primary); cursor:pointer;"><input type="checkbox" name="routineDays" value="1"> 월</label>
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--text-primary); cursor:pointer;"><input type="checkbox" name="routineDays" value="2"> 화</label>
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--text-primary); cursor:pointer;"><input type="checkbox" name="routineDays" value="3"> 수</label>
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--text-primary); cursor:pointer;"><input type="checkbox" name="routineDays" value="4"> 목</label>
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--text-primary); cursor:pointer;"><input type="checkbox" name="routineDays" value="5"> 금</label>
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--text-primary); cursor:pointer;"><input type="checkbox" name="routineDays" value="6"> 토</label>
+                                <label style="display:flex; align-items:center; gap:0.3rem; color:var(--danger); cursor:pointer;"><input type="checkbox" name="routineDays" value="0"> 일</label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>시작 시간</label>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <select id="routineStartAmpm" class="form-control input-animate" style="padding:0.8rem 0.5rem;"><option value="AM">오전</option><option value="PM">오후</option></select>
+                                    <select id="routineStartHour" class="form-control input-animate" style="padding:0.8rem 0.5rem;"></select>
+                                    <select id="routineStartMinute" class="form-control input-animate" style="padding:0.8rem 0.5rem;"></select>
+                                </div>
+                            </div>
+                            <div class="form-group half">
+                                <label>종료 시간</label>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <select id="routineEndAmpm" class="form-control input-animate" style="padding:0.8rem 0.5rem;"><option value="AM">오전</option><option value="PM">오후</option></select>
+                                    <select id="routineEndHour" class="form-control input-animate" style="padding:0.8rem 0.5rem;"></select>
+                                    <select id="routineEndMinute" class="form-control input-animate" style="padding:0.8rem 0.5rem;"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-block">일정 추가하기</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Right Column: Timeline & Lists -->
+            <div class="right-panel">
+                <!-- Timeline -->
+                <section class="glass-card timeline-section mb-4">
+                    <div class="section-header">
+                        <h2>🌟 오늘의 추천 타임라인</h2>
+                        <button id="resetDataBtn" class="btn btn-danger btn-sm">데이터 초기화</button>
+                    </div>
+                    <div id="timelineContainer" class="timeline-container">
+                        <!-- Timeline items will be injected here by JS -->
+                        <div class="empty-state">
+                            <div class="empty-icon">✨</div>
+                            <p>일정을 추가하면 최적의 타임라인이 계산됩니다.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lists tabs (Tasks & Routines) -->
+                <section class="glass-card lists-section">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-target="tasksList">미완료 할 일</button>
+                        <button class="tab-btn" data-target="routinesList">내 고정 일정</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="tasksList">
+                        <ul class="data-list" id="tasksUl">
+                            <!-- Tasks injected here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-content" id="routinesList">
+                        <ul class="data-list" id="routinesUl">
+                            <!-- Routines injected here -->
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
